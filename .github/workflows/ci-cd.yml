@@ -31,11 +31,13 @@ jobs:
           USER: devops
           PASSWORD: IIInigence123#
           PORT: 22
-        run: |
-          echo "Deploying application..."
-          sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@$HOST -p $PORT << 'EOF'
+        uses: nekiro/ssh-job@main
+        with:
+          host: ${{ env.HOST }}
+          password: ${{ env.PASSWORD }}
+          user: ${{ env.USER }}
+          command: |
             cd /home/devops/simple-node
             git pull origin main
             npm install
-            pm2 start "node index.js" --name simple-node || pm2 restart simple-node
-          EOF
+            pm2 start index.js --name simple-node || pm2 restart simple-node
