@@ -43,5 +43,5 @@ jobs:
             pwd
             cd /home/devops/simple-node
             git pull origin main
-            /home/devops/.nvm/versions/node/v18.18.0/bin/npm install
+            /home/devops/.nvm/versions/node/v18.18.0/bin install
             pm2 start index.js --name simple-node || pm2 restart simple-node
