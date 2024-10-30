@@ -1,0 +1,45 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.18.0'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Deploy
+      if: github.ref == 'refs/heads/main'
+      env:
+        HOST: 172.174.175.187
+        USER: devops
+        PASSWORD: IIInigence123#
+        PORT: 22
+      run: |
+        echo "Deploying application..."
+        sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@$HOST -p $PORT << 'EOF'
+          cd /home/devops/simple-node
+          git pull origin main
+          npm install
+          npm run build
+          pm2 restart simple-node
+        EOF
