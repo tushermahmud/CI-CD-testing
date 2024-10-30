@@ -37,5 +37,5 @@ jobs:
           cd /home/devops/simple-node
           git pull origin main
           npm install
-          pm2 restart simple-node
+          pm2 start index.js --name simple-node || pm2 restart simple-node
         EOF
