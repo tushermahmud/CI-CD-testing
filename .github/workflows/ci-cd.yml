@@ -43,5 +43,8 @@ jobs:
             pwd
             cd /home/devops/simple-node
             git pull origin main
-            /home/devops/.nvm/versions/node/v18.18.0/bin/npm install
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 18.18.0
+            npm install
             pm2 start index.js --name simple-node || pm2 restart simple-node
